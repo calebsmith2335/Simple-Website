@@ -1,9 +1,240 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>A Message</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You ❤️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffd6e7, #ffeef5, #fff7fb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      width: min(90%, 700px);
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 28px;
+      padding: 40px 28px;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+      backdrop-filter: blur(8px);
+    }
+
+    .small-text {
+      color: #b04a6f;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      color: #d63384;
+      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      line-height: 1.1;
+    }
+
+    p {
+      color: #6b3b52;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin: 0 auto;
+      max-width: 540px;
+    }
+
+    .button-row {
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .primary-btn {
+      background: #ff4f93;
+      color: white;
+    }
+
+    .secondary-btn {
+      background: white;
+      color: #d63384;
+    }
+
+    #messageBox {
+      margin-top: 28px;
+      padding: 22px 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.85);
+      color: #7a3658;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      min-height: 110px;
+      display: none;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      animation: blink 0.8s infinite;
+      color: #d63384;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      50.01%, 100% { opacity: 0; }
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -30px;
+      color: rgba(255, 79, 147, 0.65);
+      font-size: 20px;
+      animation: floatUp linear forwards;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    .footer {
+      margin-top: 20px;
+      color: #b04a6f;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 30px 20px;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      #messageBox {
+        font-size: 1.05rem;
+      }
+    }
+  </style>
 </head>
-<body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial;">
+<body>
+  <div class="card">
+    <div class="small-text">A little something for you</div>
     <h1>I love you ❤️</h1>
+    <p>
+      I made this just to remind you how special you are to me.
+    </p>
+
+    <div class="button-row">
+      <button class="primary-btn" onclick="revealMessage()">Open My Note</button>
+      <button class="secondary-btn" onclick="showReason()">One More Reason</button>
+    </div>
+
+    <div id="messageBox"></div>
+
+    <div class="footer">Made with love.</div>
+  </div>
+
+  <script>
+    const fullMessage =
+      "You mean so much to me. Thank you for your smile, your heart, and the way you make life feel brighter. No matter what, I just want you to know this: I love you so, so much. ❤️";
+
+    const reasons = [
+      "You make ordinary days feel special.",
+      "Your smile makes everything better.",
+      "You bring peace, joy, and warmth with you.",
+      "You are thoughtful in ways that mean a lot to me.",
+      "Life feels brighter with you in it.",
+      "You are deeply loved, always. ❤️"
+    ];
+
+    let typedAlready = false;
+    let reasonIndex = 0;
+
+    function revealMessage() {
+      const box = document.getElementById("messageBox");
+      box.style.display = "block";
+
+      if (typedAlready) {
+        box.innerHTML = fullMessage;
+        return;
+      }
+
+      typedAlready = true;
+      typeMessage(fullMessage, box, 0);
+    }
+
+    function typeMessage(text, element, index) {
+      if (index < text.length) {
+        element.innerHTML = text.substring(0, index + 1) + '<span class="cursor">|</span>';
+        setTimeout(() => typeMessage(text, element, index + 1), 35);
+      } else {
+        element.innerHTML = text;
+      }
+    }
+
+    function showReason() {
+      const box = document.getElementById("messageBox");
+      box.style.display = "block";
+      box.innerHTML = reasons[reasonIndex];
+      reasonIndex = (reasonIndex + 1) % reasons.length;
+    }
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "❤";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+      heart.style.fontSize = (16 + Math.random() * 22) + "px";
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 8000);
+    }
+
+    setInterval(createHeart, 350);
+  </script>
 </body>
 </html>
